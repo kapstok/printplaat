@@ -1,0 +1,3 @@
+/home/jan/projecten/printplaat/frontend/build/CMakeFiles/framework.dir
+/home/jan/projecten/printplaat/frontend/build/CMakeFiles/edit_cache.dir
+/home/jan/projecten/printplaat/frontend/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,16 @@
+{
+	"authors": [
+		"Jan Allersma"
+	],
+	"copyright": "Copyright © 2022, Jan Allersma",
+	"dependencies": {
+	},
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"name": "printplaat",
+	"sourcePaths": ["backend"],
+	"dflags": ["-L-lstdc++"],
+	"lflags": ["-Lfrontend/build", "-lframework", "-lSDL2"],
+	"targetType": "executable",
+	"preBuildCommands": ["./build-frontend"]
+}

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir frontend/build
+pushd frontend/build
+cmake ../..
+make
+pwd
+popd
