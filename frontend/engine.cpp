@@ -1,5 +1,7 @@
 #include <SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <cmath>
+#include <iostream>
 
 class Framework {
 public:
@@ -11,12 +13,20 @@ public:
         SDL_RenderClear(renderer);      // Clear the newly created window
         SDL_RenderPresent(renderer);    // Reflects the changes done in the
                                         //  window.
+
+        if (TTF_Init() < 0) {
+            std::cout << "TTF init went wrong";
+        } else {
+            sans = TTF_OpenFont("Lato-Light.ttf", 24);
+        }
     }
 
     // Destructor
-    ~Framework(){
+    ~Framework() {
+        TTF_CloseFont(sans);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
+        TTF_Quit();
         SDL_Quit();
     }
 
@@ -37,19 +47,18 @@ public:
         SDL_RenderPresent(renderer);
     }
 
-    void drawGrid(int rows, int columns, int x, int y) {
-        SDL_Rect rect;
-        rect.x = (600 / columns) * x + 1;
-        rect.y = (600 / rows) * y + 1;
-        rect.w = 600 / columns;
-        rect.h = 600 / rows;
+    void drawRect(int x, int y, int w, int h) {
+        SDL_Rect rect = {x,y,w,h};
+        SDL_RenderDrawRect(renderer, &rect);
+    }
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        //SDL_RenderDrawRect(renderer, &rect);
+    void fillRect(int x, int y, int w, int h) {
+        SDL_Rect rect = {x,y,w,h};
         SDL_RenderFillRect(renderer, &rect);
     }
 
     SDL_Renderer *renderer = NULL;      // Pointer for the renderer
+    TTF_Font* sans = NULL;
 
 private:
     int height;     // Height of the window
@@ -57,59 +66,68 @@ private:
     SDL_Window *window = NULL;      // Pointer for the window
 };
 
-Framework* fw;
+class Button {
+    public:
+    Button(Framework* fw, int x, int y, int r, int g, int b, char* text) {
+        int width, height;
+        TTF_SizeUTF8(fw->sans, text, &width, &height);
 
-// void start() {
-// SDL_Renderer *renderer = NULL;      // Pointer for the renderer
-//     int height;     // Height of the window
-//     int width;      // Width of the window
-//     SDL_Window *window = NULL;      // Pointer for the window
-//         SDL_Init(SDL_INIT_VIDEO);       // Initializing SDL as Video
-//         SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
-//         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);      // setting draw color
-//         SDL_RenderClear(renderer);      // Clear the newly created window
-//         SDL_RenderPresent(renderer);    // Reflects the changes done in the
-//                                         //  window.
-//     SDL_Event event;    // Event variable
+        SDL_Color color = {r,g,b};
+        msg = TTF_RenderText_Blended(fw->sans, text, color);
+        texture = SDL_CreateTextureFromSurface(fw->renderer, msg);
 
-//     // Below while loop checks if the window has terminated using close in the
-//     //  corner.
-//     while(!(event.type == SDL_QUIT)){
-//         SDL_Delay(10);  // setting some Delay
-//         SDL_PollEvent(&event);  // Catching the poll event.
-//     }
-// }
-
-void init() {
-//int main(int argc, char * argv[]) {
-
-    // Creating the object by passing Height and Width value.
-    fw = new Framework(600, 600);
-}
-
-void draw(int row, int column, int x, int y) {
-    // Calling the function that draws circle.
-    //fw.draw_circle(200, 100, 50);
-    fw->drawGrid(row, column, x, y);
-}
-
-void render() {
-    SDL_RenderPresent(fw->renderer);
-    SDL_Event event;    // Event variable
-
-    // Below while loop checks if the window has terminated using close in the
-    //  corner.
-    while(!(event.type == SDL_QUIT)){
-        SDL_Delay(10);  // setting some Delay
-        SDL_PollEvent(&event);  // Catching the poll event.
+        SDL_Rect rect = {x, y, width, height};
+        SDL_RenderCopy(fw->renderer, texture, 0x0, &rect);
     }
 
-    delete fw;
+    ~Button() {
+        SDL_FreeSurface(msg);
+        SDL_DestroyTexture(texture);
+
+    }
+
+    private:
+        SDL_Surface* msg;
+        SDL_Texture* texture;
+};
+
+Framework* fw;
+SDL_Event event;
+
+void init(int width, int height) {
+    fw = new Framework(width, height);
 }
 
-void foo();
+void drawRect(int x, int y, int width, int height) {
+    fw->drawRect(x, y, width, height);
+}
 
-int main() {
-    foo();
+void fillRect(int x, int y, int width, int height) {
+    fw->fillRect(x, y, width, height);
+}
+
+void setColor(int r, int g, int b, int a) {
+    SDL_SetRenderDrawColor(fw->renderer, r, g, b, a);
+}
+
+// Processes new changes on GUI.
+// Returns 1 if user closes window.
+short tick() {
+    SDL_Delay(10);
+    SDL_PollEvent(&event);
+
+    if (event.type == SDL_QUIT) {
+        delete fw;
+        return 1;
+    }
+
     return 0;
+}
+
+void redraw() {
+    SDL_RenderPresent(fw->renderer);
+}
+
+void createButton(int x, int y, int r, int g, int b, char* text) {
+    Button btn = Button(fw, x, y, r, g, b, text);
 }

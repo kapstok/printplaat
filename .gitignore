@@ -16,3 +16,4 @@ printplaat-test-*
 *.lst
 
 printplaat
+*/build/*

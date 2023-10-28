@@ -1,2 +1,0 @@
-/usr/bin/ar qc libframework.a CMakeFiles/framework.dir/frontend/engine.cpp.o
-/usr/bin/ranlib libframework.a

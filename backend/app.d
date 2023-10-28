@@ -1,43 +1,45 @@
-//import psychometry;
-//import imageformats;
-
 import std.stdio;
+import std.string;
 
-extern (C++) void init();
-extern (C++) void draw(int row, int column, int x, int y);
-extern (C++) void render();
+extern (C++) void init(int width, int height);
+extern (C++) void drawRect(int x, int y, int width, int height);
+extern (C++) short tick();
+extern (C++) void redraw();
+extern (C++) void fillRect(int x, int y, int width, int height);
+extern (C++) void setColor(int r, int g, int b, int a);
+extern (C++) void createButton(int x, int y, int r, int g, int b, char* text);
 
-
-ubyte[] result;
-/*
-ubyte* decode() {
-    Converter converter = new Converter(new LSBMode(64));
-    IFImage underwroteImage = read_png("./result.png");
-    result = converter.decode(underwroteImage.pixels);
-    writeln(cast(string)result);
-	return result.ptr;
-}
-
-extern (C++) ubyte* foo() {
-    //writeln("foo");
-    // init();
-    // draw(3, 3, 0, 0);
-    // draw(3, 3, 2, 2);
-    // draw(3, 3, 1, 1);
-    // render();
-    main();
-    return decode;
-}
-*/
-
-extern (C++) void foo() {
-    main();
+void drawGrid(int width, int height) {
+	for (int x = 0; x < width; x++) {
+		for (int y = 0; y < height; y++) {
+			drawRect(x * 20, y * 20, 20, 20);
+		}
+	}
 }
 
 void main() {
-    init();
-    draw(3,3,0,0);
-    draw(3,3,2,2);
-    draw(3,3,1,1);
-    render();
+    init(600, 800);
+
+	// Background grid
+	setColor(0xa0, 0xa0, 0xff, 0xff);
+	fillRect(0,0,600,600);
+
+	// Background toolbar
+	setColor(0xff, 0xff, 0xff, 1);
+	fillRect(600, 0, 200, 600);
+
+	// Draw grid
+	setColor(0xC0,0xC0,0xE0,0xff);
+    drawGrid(600 / 20, 600 / 20);
+
+	// Create button
+	createButton(650, 50, 0,0,0, cast(char*)toStringz("Text"));
+
+	redraw();
+    short signal = tick();
+	writeln("Test");
+
+	while (signal == 0) {
+		signal = tick();
+	}
 }

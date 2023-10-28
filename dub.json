@@ -10,7 +10,7 @@
 	"name": "printplaat",
 	"sourcePaths": ["backend"],
 	"dflags": ["-L-lstdc++"],
-	"lflags": ["-Lfrontend/build", "-lframework", "-lSDL2"],
+	"lflags": ["-Lfrontend/build", "-lframework", "-lSDL2", "-lSDL2_ttf"],
 	"targetType": "executable",
 	"preBuildCommands": ["./build-frontend"]
 }
