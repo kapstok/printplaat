@@ -5,10 +5,10 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 # Our project name
-project (framework)
+project (sdlwrapper)
 
 file(GLOB SOURCES "sdl_wrapper/*.cpp")
-add_library(framework STATIC ${SOURCES})
+add_library(sdlwrapper STATIC ${SOURCES})
 
 # For finding our SDL2 package!
 INCLUDE(FindPkgConfig)
@@ -21,4 +21,4 @@ PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
 
 # Linking SDL2 library with our project.
-target_link_libraries(framework ${SDL2_LIBRARIES})
+target_link_libraries(sdlwrapper ${SDL2_LIBRARIES})

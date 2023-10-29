@@ -4,13 +4,25 @@
 	],
 	"copyright": "Copyright © 2022, Jan Allersma",
 	"dependencies": {
+		"arsd-official:dom": "~>11.2.2"
 	},
 	"description": "A minimal D application.",
+	"dflags": [
+		"-L-lstdc++"
+	],
+	"lflags": [
+		"-Lsdl_wrapper/build",
+		"-lsdlwrapper",
+		"-lSDL2",
+		"-lSDL2_ttf"
+	],
 	"license": "proprietary",
 	"name": "printplaat",
-	"sourcePaths": ["src"],
-	"dflags": ["-L-lstdc++"],
-	"lflags": ["-Lsdl_wrapper/build", "-lframework", "-lSDL2", "-lSDL2_ttf"],
-	"targetType": "executable",
-	"preBuildCommands": ["./build-frontend"]
+	"preBuildCommands": [
+		"./build-frontend"
+	],
+	"sourcePaths": [
+		"src"
+	],
+	"targetType": "executable"
 }

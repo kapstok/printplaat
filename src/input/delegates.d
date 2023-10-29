@@ -8,6 +8,7 @@ public import input.field : Field;
 
 // TODO: Restructure code and place this somewhere else.
 import palette;
+import components, persistency;
 import std.string;
 extern (C++) void redraw();
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
@@ -37,6 +38,12 @@ private void addToGrid(int x, int y) {
             Field(x, y, w, h, () {state = "Text [ID]";})
         );
         redraw();
+
+        // Test data
+        components.Label label = new components.Label("[Your text here]", x, y, w, h);
+        string path = "/tmp/printplaat.xml";
+        persistency.save(label, path);
+        persistency.load(path);
     } else if (state.startsWith("Text")) {
         state = "";
         writeln("Clicked on text!");

@@ -27,13 +27,14 @@ public void drawMainWindow() {
 	setColor(palette.printplaat, 0xff);
 	fillRect(0,0,600,600);
 
+	// Draw grid
+	setColor(palette.node, 0xff);
+	// Add one more to width and height to also show non-overflowing parts of grid
+    drawGrid(gridOffsetX, gridOffsetY, 600 / 20 + 1, 600 / 20 + 1);
+
 	// Background functionbar
 	setColor(palette.functionbar, 0xff);
 	fillRect(600, 0, 200, 600);
-
-	// Draw grid
-	setColor(palette.node, 0xff);
-    drawGrid(gridOffsetX, gridOffsetY, 600 / 20, 600 / 20);
 
 	// Create button
 	int w, h;
