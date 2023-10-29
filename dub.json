@@ -19,7 +19,7 @@
 	"license": "proprietary",
 	"name": "printplaat",
 	"preBuildCommands": [
-		"./build-frontend"
+		"./build-wrapper"
 	],
 	"sourcePaths": [
 		"src"
