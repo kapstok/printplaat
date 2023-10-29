@@ -7,7 +7,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 # Our project name
 project (framework)
 
-add_library(framework STATIC frontend/engine.cpp)
+file(GLOB SOURCES "sdl_wrapper/*.cpp")
+add_library(framework STATIC ${SOURCES})
 
 # For finding our SDL2 package!
 INCLUDE(FindPkgConfig)

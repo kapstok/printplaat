@@ -1,7 +1,7 @@
 #!/bin/bash
 
-mkdir frontend/build
-pushd frontend/build
+mkdir sdl_wrapper/build
+pushd sdl_wrapper/build
 cmake ../..
 make
 pwd

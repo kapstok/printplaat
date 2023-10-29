@@ -8,9 +8,9 @@
 	"description": "A minimal D application.",
 	"license": "proprietary",
 	"name": "printplaat",
-	"sourcePaths": ["backend"],
+	"sourcePaths": ["src"],
 	"dflags": ["-L-lstdc++"],
-	"lflags": ["-Lfrontend/build", "-lframework", "-lSDL2", "-lSDL2_ttf"],
+	"lflags": ["-Lsdl_wrapper/build", "-lframework", "-lSDL2", "-lSDL2_ttf"],
 	"targetType": "executable",
 	"preBuildCommands": ["./build-frontend"]
 }

@@ -1,7 +1,11 @@
+// Consider this as the 'main' file of the library.
+
 #include <SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <cmath>
 #include <iostream>
+
+#include "palette.h"
 
 class Framework {
 public:
@@ -30,10 +34,7 @@ public:
         SDL_Quit();
     }
 
-    void draw_circle(int center_x, int center_y, int radius_){
-        // Setting the color to be RED with 100% opaque (0% trasparent).
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-
+    void drawCircle(int center_x, int center_y, int radius_){
         // Drawing circle
         for(int x=center_x-radius_; x<=center_x+radius_; x++){
             for(int y=center_y-radius_; y<=center_y+radius_; y++){
@@ -42,9 +43,6 @@ public:
                 }
             }
         }
-
-        // Show the change on the screen
-        SDL_RenderPresent(renderer);
     }
 
     void drawRect(int x, int y, int w, int h) {
@@ -68,15 +66,16 @@ private:
 
 class Button {
     public:
-    Button(Framework* fw, int x, int y, int r, int g, int b, char* text) {
-        int width, height;
-        TTF_SizeUTF8(fw->sans, text, &width, &height);
+    Button(Framework* fw, int x, int y, int* width, int* height, int hex, char* text) {
+        int r, g, b;
+        hexToRgb(hex, &r, &g, &b);
+        TTF_SizeUTF8(fw->sans, text, width, height);
 
         SDL_Color color = {r,g,b};
         msg = TTF_RenderText_Blended(fw->sans, text, color);
         texture = SDL_CreateTextureFromSurface(fw->renderer, msg);
 
-        SDL_Rect rect = {x, y, width, height};
+        SDL_Rect rect = {x, y, *width, *height};
         SDL_RenderCopy(fw->renderer, texture, 0x0, &rect);
     }
 
@@ -106,7 +105,13 @@ void fillRect(int x, int y, int width, int height) {
     fw->fillRect(x, y, width, height);
 }
 
-void setColor(int r, int g, int b, int a) {
+void fillCircle(int x, int y, int radius) {
+    fw->drawCircle(x, y, radius);
+}
+
+void setColor(int hex, int a) {
+    int r, g, b;
+    hexToRgb(hex, &r, &g, &b);
     SDL_SetRenderDrawColor(fw->renderer, r, g, b, a);
 }
 
@@ -128,6 +133,6 @@ void redraw() {
     SDL_RenderPresent(fw->renderer);
 }
 
-void createButton(int x, int y, int r, int g, int b, char* text) {
-    Button btn = Button(fw, x, y, r, g, b, text);
+void createButton(int x, int y, int* w, int* h, int hex, char* text) {
+    Button btn = Button(fw, x, y, w, h, hex, text);
 }
