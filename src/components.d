@@ -3,6 +3,8 @@ module components;
 import arsd.dom;
 import std.conv;
 
+public Component[] components;
+
 abstract class Component {
     public immutable string type;
     public immutable int x;
