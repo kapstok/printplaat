@@ -1,8 +1,8 @@
 #!/bin/bash
 
-mkdir sdl_wrapper/build
-pushd sdl_wrapper/build
-cmake ../..
+mkdir build
+pushd build
+cmake ..
 make
 pwd
 popd

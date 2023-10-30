@@ -2,7 +2,8 @@
 
 ## Dependencies
 
-- Dub
+- Dub (For Linux)
+- LDC2 (For Apple Silicon)
 - CMake
 - G++
 - SDL2 development headers
@@ -12,5 +13,6 @@
 ## Running
 
 ```bash
-dub run --force
+dub run --force     # On Linux
+./run-apple-silicon # On Macbooks with an M1 or M2 chip
 ```

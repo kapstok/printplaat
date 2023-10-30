@@ -11,7 +11,7 @@
 		"-L-lstdc++"
 	],
 	"lflags": [
-		"-Lsdl_wrapper/build",
+		"-Lbuild",
 		"-lsdlwrapper",
 		"-lSDL2",
 		"-lSDL2_ttf"
@@ -24,5 +24,6 @@
 	"sourcePaths": [
 		"src"
 	],
-	"targetType": "executable"
+	"targetType": "executable",
+	"targetPath": "build"
 }

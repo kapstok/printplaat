@@ -1,0 +1,24 @@
+#!/bin/bash
+
+mkdir build
+pushd build
+
+cmake .. -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -I/usr/local/homebrew/Cellar/sdl2/2.28.4/include/SDL2/ -I/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/include/"
+make
+
+mkdir arsd-official
+mkdir arsd-official/arsd
+
+if ! [ -f arsd-official/arsd/dom.d ]; then
+  curl https://raw.githubusercontent.com/adamdruppe/arsd/a4b8490de6aeb201bbdeba69dd9230a14d1d7d96/dom.d -o arsd-official/arsd/dom.d
+else
+  echo 'arsd:dom dependency was already downloaded. Skipped download.'
+fi
+pwd
+popd
+
+/usr/local/homebrew/Cellar/ldc/1.35.0/bin/ldc2 `find src -name "*.d"` ./build/arsd-official/arsd/dom.d \
+-I./src -I./build/arsd-official/ -L-lstdc++ \
+-L-L/usr/local/homebrew/Cellar/sdl2/2.28.4/lib/ -L-L/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/lib/ \
+-L-Lbuild -L-lsdlwrapper -L-lSDL2 -L-lSDL2_ttf -L-w \
+--march=arm64 -g --od=./build --of=./build/printplaat --run
