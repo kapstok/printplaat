@@ -67,7 +67,7 @@ private:
 class Button {
     public:
     Button(Framework* fw, int x, int y, int* width, int* height, int hex, char* text) {
-        int r, g, b;
+        ubyte r, g, b;
         hexToRgb(hex, &r, &g, &b);
         TTF_SizeUTF8(fw->sans, text, width, height);
 
@@ -110,7 +110,7 @@ void fillCircle(int x, int y, int radius) {
 }
 
 void setColor(int hex, int a) {
-    int r, g, b;
+    ubyte r, g, b;
     hexToRgb(hex, &r, &g, &b);
     SDL_SetRenderDrawColor(fw->renderer, r, g, b, a);
 }

@@ -1,3 +1,5 @@
 #pragma once
 
-void hexToRgb(int hex, int* r, int* g, int* b);
+#define ubyte unsigned char
+
+void hexToRgb(int hex, ubyte* r, ubyte* g, ubyte* b);
