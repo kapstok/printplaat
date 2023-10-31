@@ -1,10 +1,13 @@
 module palette;
 
 // Only for testing
-import std.stdio;
 import std.conv;
 
-import std.string;
+import std.string, std.stdio;
+
+import components;
+import input = input.delegates;
+import field = input.field;
 
 extern (C++) public void redraw();
 
@@ -31,6 +34,7 @@ public void drawMainWindow() {
 	setColor(palette.node, 0xff);
 	// Add one more to width and height to also show non-overflowing parts of grid
     drawGrid(gridOffsetX, gridOffsetY, 600 / 20 + 1, 600 / 20 + 1);
+	drawComponents(gridOffsetX, gridOffsetY);
 
 	// Background functionbar
 	setColor(palette.functionbar, 0xff);
@@ -40,6 +44,8 @@ public void drawMainWindow() {
 	int w, h;
 	createButton(650, 50, &w, &h, palette.item, cast(char*)toStringz("Text"));
     writeln("w: " ~ to!string(w) ~ ", h: " ~ to!string(h));
+
+	redraw();
 }
 
 void drawGrid(int offsetX, int offsetY, int width, int height) {
@@ -48,4 +54,36 @@ void drawGrid(int offsetX, int offsetY, int width, int height) {
 			fillCircle(x * 20 + offsetX, y * 20 + offsetY, 2);
 		}
 	}
+}
+
+void drawComponents(int offsetX, int offsetY) {
+	foreach(Component component; components.getComponents()) {
+		drawComponent(component, offsetX, offsetY);
+	}
+}
+
+void drawComponent(Component component, int offsetX, int offsetY) {
+	if (component.type == "Label") {
+    	int w, h;
+
+		// Visual appearance
+        createButton(
+            component.x + offsetX, component.y + offsetY,
+            &w, &h, // Both variables are required, but they only have use when button is created in engine.cpp.
+            palette.toolbar,
+            cast(char*)toStringz((cast(Label)component).value));
+
+		// Input appearance
+        input.grid.addDelegate(
+            field.Field(
+                component.x + offsetX,
+                component.y + offsetY,
+                cast(int) component.w,
+                cast(int) component.h,
+                () {writeln("%)!"); if (component.id != null) input.state = "Text " ~ component.id;}
+            )
+        );
+    } else {
+        writeln("::ERROR:: Unsupported component type!");
+    }
 }

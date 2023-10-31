@@ -136,3 +136,7 @@ void redraw() {
 void createButton(int x, int y, int* w, int* h, int hex, char* text) {
     Button btn = Button(fw, x, y, w, h, hex, text);
 }
+
+void getFontWidthAndHeight(int* width, int* height, char* text) {
+    TTF_SizeUTF8(fw->sans, text, width, height);
+}

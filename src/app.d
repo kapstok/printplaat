@@ -3,7 +3,7 @@ import std.string;
 import std.conv;
 
 // Internal source files
-import palette;
+import palette, persistency;//, components;
 import input = input.delegates;
 
 extern (C++) void init(int width, int height);
@@ -22,14 +22,13 @@ enum int userClosedWindowSignal = 0;
 void main() {
     init(600, 800);
 
+	persistency.load("/tmp/printplaat.xml");
 	palette.drawMainWindow();
-	palette.redraw();
 	input.functionBar.addDelegate(
-		input.Field(650, 50, 42, 29, () {writeln("DD");input.state = "Add text";})
+		input.Field(650, 50, 42, 29, () {input.state = "Add text";})
 	);
 
     short signal = tick();
-	writeln("Test");
 	int[3] mouseState;
 
 	while (signal == userClosedWindowSignal) {

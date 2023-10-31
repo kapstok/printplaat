@@ -2,14 +2,14 @@
 
 module input.delegates;
 
-import std.stdio;
+import std.stdio, std.string;
 
 public import input.field : Field;
 
-// TODO: Restructure code and place this somewhere else.
 import palette;
 import components, persistency;
 import std.string;
+
 extern (C++) void redraw();
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
 
@@ -20,7 +20,7 @@ public string state = "";
 public void onLeftClick(int x, int y) {
     if (grid.isInField(x, y)) {
         writeln("Is in grid");
-        addToGrid(x, y);
+        inputToGrid(x, y);
     } else if (functionBar.isInField(x, y)) {
         writeln("Is in function bar");
     } else {
@@ -28,24 +28,16 @@ public void onLeftClick(int x, int y) {
     }
 }
 
-private void addToGrid(int x, int y) {
+private void inputToGrid(int x, int y) {
     if (state == "Add text") {
         state = "";
-    	int w, h;
-        drawMainWindow();
-	    createButton(x, y, &w, &h, palette.toolbar, cast(char*)toStringz("[Your text here]"));
-        grid.addDelegate(
-            Field(x, y, w, h, () {state = "Text [ID]";})
-        );
-        redraw();
 
-        // Test data
-        components.Label label = new components.Label("[Your text here]", x, y, w, h);
+        components.Label label = new components.Label("[Your text here]", x, y);
+        components.push(label);
         string path = "/tmp/printplaat.xml";
-        persistency.save(label, path);
-        persistency.load(path);
-    } else if (state.startsWith("Text")) {
+        persistency.save(path);
+    } else if (state.startsWith("Text ")) {
+        writeln(state);
         state = "";
-        writeln("Clicked on text!");
     }
 }

@@ -1,18 +1,48 @@
 module components;
 
 import arsd.dom;
-import std.conv;
+import std.conv, std.stdio, std.string;
 
-public Component[] components;
+import palette;
+
+extern (C++) void getFontWidthAndHeight(int* width, int* height, char* text);
+
+private Component[] components;
+
+public void push(Component component) {
+    push(component, true);
+}
+
+public void push(Component component, bool redraw) {
+    component.id = to!string(components.length);
+    components ~= component;
+
+    if (redraw) {
+        palette.drawMainWindow();
+    }
+}
+
+public Component[] getComponents() {
+    return components;
+}
 
 abstract class Component {
     public immutable string type;
-    public immutable int x;
-    public immutable int y;
-    public immutable int w;
-    public immutable int h;
+    public immutable int x, y, w, h;
+    public string id = null;
 
-    this(string type, int x, int y, int h, int w) {
+    this(string type, int x, int y, int w, int h) {
+        this.type = type;
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+    }
+
+    // Should only be used with new Labels
+    protected this(string type, string value, int x, int y) {
+        int w, h;
+        getFontWidthAndHeight(&w, &h, cast(char*)toStringz(value));
         this.type = type;
         this.x = x;
         this.y = y;
@@ -38,8 +68,13 @@ abstract class Component {
 class Label : Component {
     public string value;
 
-    this(string value, int x, int y, int h, int w) {
-        super("Label", x, y, h, w);
+    this(string value, int x, int y) {
+        super("Label", value, x, y);
+        this.value = value;
+    }
+
+    this(string value, int x, int y, int w, int h) {
+        super("Label", x, y, w, h);
         this.value = value;
     }
 

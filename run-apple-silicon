@@ -1,4 +1,3 @@
 #!/bin/bash
 
-./build-apple-silicon
-./build/printplaat
+./build-apple-silicon && ./build/printplaat
