@@ -14,7 +14,9 @@
 		"-Lbuild",
 		"-lsdlwrapper",
 		"-lSDL2",
-		"-lSDL2_ttf"
+		"-lSDL2_ttf",
+		"-L/usr/local/homebrew/Cellar/sdl2/2.28.4/lib/",
+		"-L/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/lib/"
 	],
 	"license": "proprietary",
 	"name": "printplaat",
