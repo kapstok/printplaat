@@ -80,7 +80,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
                 component.y + offsetY,
                 cast(int) component.w,
                 cast(int) component.h,
-                () {writeln("%)!"); if (component.id != null) input.state = "Text " ~ component.id;}
+                () {if (component.id != null) input.state = "Text " ~ component.id;}
             )
         );
     } else {
