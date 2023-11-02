@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "palette.h"
+#include "svg.h"
 
 class Framework {
 public:
@@ -130,6 +131,9 @@ short tick() {
 }
 
 void redraw() {
+    // setColor(0xff0000, 0xff);
+    // svg_process_M(110, 190);
+    // svg_process_c(fw->renderer, 20,0, 15,-80, 40,-70);
     SDL_RenderPresent(fw->renderer);
 }
 

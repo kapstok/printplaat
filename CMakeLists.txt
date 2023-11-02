@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 # Our project name
 project (sdlwrapper)
 
-file(GLOB SOURCES "sdl_wrapper/*.cpp")
+file(GLOB SOURCES "sdl_wrapper/*.cpp" "sdl_wrapper/*.c")
 add_library(sdlwrapper STATIC ${SOURCES})
 
 # For finding our SDL2 package!
