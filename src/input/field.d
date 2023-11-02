@@ -2,7 +2,7 @@ module input.field;
 
 public struct Field {
     protected Field[] subFields;
-    protected void function() @safe action;
+    protected void function() action;
     protected void delegate() @safe delegateAction;
     protected int x, y, w, h;
 
@@ -10,7 +10,7 @@ public struct Field {
         this(x, y, w, h, () {});
     }
 
-    this(int x, int y, int w, int h, void function() @safe action) {
+    this(int x, int y, int w, int h, void function() action) {
         this.x = x;
         this.y = y;
         this.w = w;

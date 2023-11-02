@@ -1,16 +1,13 @@
 module palette;
 
-// Only for testing
-import std.conv;
-
 import std.string, std.stdio;
 
 import components;
 import input = input.delegates;
 import field = input.field;
 
-extern (C++) public void redraw();
-
+extern (C++) void redraw();
+extern (C++) void drawRect(int x, int y, int width, int height);
 extern (C++) void fillRect(int x, int y, int width, int height);
 extern (C++) void fillCircle(int x, int y, int radius);
 extern (C++) void setColor(int hex, int a);
@@ -26,6 +23,8 @@ public int gridOffsetX = 0;
 public int gridOffsetY = 0;
 
 public void drawMainWindow() {
+	int w, h;
+
  	// Background grid
 	setColor(palette.printplaat, 0xff);
 	fillRect(0,0,600,600);
@@ -40,10 +39,12 @@ public void drawMainWindow() {
 	setColor(palette.functionbar, 0xff);
 	fillRect(600, 0, 200, 600);
 
-	// Create button
-	int w, h;
+	// Create 'add Label' button
 	createButton(650, 50, &w, &h, palette.item, cast(char*)toStringz("Text"));
-    writeln("w: " ~ to!string(w) ~ ", h: " ~ to!string(h));
+	if (input.state == "Add Label") {
+		setColor(palette.item, 0xff);
+		drawRect(625, 40, w + 50, h + 20);
+	}
 
 	redraw();
 }
@@ -80,7 +81,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
                 component.y + offsetY,
                 cast(int) component.w,
                 cast(int) component.h,
-                () {if (component.id != null) input.state = "Text " ~ component.id;}
+                () {if (component.id != null) input.state = "Label " ~ component.id;}
             )
         );
     } else {

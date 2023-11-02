@@ -3,7 +3,7 @@ import std.string;
 import std.conv;
 
 // Internal source files
-import palette, persistency;//, components;
+import palette, persistency;
 import input = input.delegates;
 
 extern (C++) void init(int width, int height);
@@ -25,7 +25,7 @@ void main() {
 	persistency.load("/tmp/printplaat.xml");
 	palette.drawMainWindow();
 	input.functionBar.addDelegate(
-		input.Field(650, 50, 42, 29, () {input.state = "Add text";})
+		input.Field(650, 50, 42, 29, () { input.state = "Add Label"; palette.drawMainWindow(); })
 	);
 
     short signal = tick();

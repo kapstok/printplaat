@@ -29,14 +29,14 @@ public void onLeftClick(int x, int y) {
 }
 
 private void inputToGrid(int x, int y) {
-    if (state == "Add text") {
+    if (state == "Add Label") {
         state = "";
 
         components.Label label = new components.Label("[Your text here]", x, y);
         components.push(label);
         string path = "/tmp/printplaat.xml";
         persistency.save(path);
-    } else if (state.startsWith("Text ")) {
+    } else if (state.startsWith("Label ")) {
         writeln(state);
         state = "";
     }
