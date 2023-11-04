@@ -31,14 +31,6 @@ Engine::Engine(int color, int width, int height) {
     }
 	
 	SDL_RenderClear(renderer);
-	// Component* lettuce = new Component("rsc/components/clicker.png", this->renderer, 0, 0, 200, 200);
-
-	// if (lettuce->isValid()) {
-	// 	this->components.push_back(lettuce);
-	// } else {
-	// 	delete lettuce;
-	// }
-
 	SDL_RenderPresent(renderer);
 }
 

@@ -87,7 +87,7 @@ class Label : Component {
 
 class Tweaker : Component {
     this(int x, int y, int w, int h) {
-        super("Tweaker", x, y, w, h);
+        super("Tweaker", snapToGrid(x) - w / 2, snapToGrid(y) - h / 2, w, h);
     }
 
     override protected string concreteClassToXml() {
@@ -97,10 +97,18 @@ class Tweaker : Component {
 
 class Clicker : Component {
     this(int x, int y, int w, int h) {
-        super("Clicker", x, y, w, h);
+        super("Clicker", snapToGrid(x) - w / 2, snapToGrid(y) - h / 2, w, h);
     }
 
     override protected string concreteClassToXml() {
         return "";
     }
+}
+
+package int snapToGrid(int n) {
+    int remainder = n % palette.nodeDistance;
+    if (remainder > palette.nodeDistance / 2) {
+        return n + palette.nodeDistance - remainder;
+    }
+    return n - remainder;
 }

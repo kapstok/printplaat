@@ -5,16 +5,11 @@ module input.delegates;
 import std.stdio, std.string;
 
 public import input.field : Field;
-
 import palette;
 import components, persistency;
-import std.string;
 
 extern (C++) void redraw();
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
-
-// Temporary for testing
-// extern (C++) void resetComponents();
 
 public Field grid = Field(0, 0, 600, 600);
 public Field functionBar = Field(600, 0, 200, 600);
@@ -39,7 +34,6 @@ private void inputToGrid(int x, int y) {
         state = "";
 
         components.Label label = new components.Label("[Your text here]", x, y);
-        // resetComponents();
         components.push(label);
         persistency.save(path);
     } else if (state.startsWith("Label ")) {
@@ -48,7 +42,7 @@ private void inputToGrid(int x, int y) {
     } else if (state == "Add Tweaker") {
         state = "";
 
-        components.Tweaker tweaker = new components.Tweaker(x, y, 48, 48);
+        components.Tweaker tweaker = new components.Tweaker(x, y, 24, 24);
         components.push(tweaker);
         persistency.save(path);
     } else if (state.startsWith("Tweaker ")) {
@@ -57,7 +51,7 @@ private void inputToGrid(int x, int y) {
     } else if (state == "Add Clicker") {
         state = "";
 
-        components.Clicker clicker = new components.Clicker(x, y, 48, 48);
+        components.Clicker clicker = new components.Clicker(x, y, 24, 24);
         components.push(clicker);
         persistency.save(path);
     } else if (state.startsWith("Clicker ")) {

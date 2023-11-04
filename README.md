@@ -35,3 +35,9 @@ and install LDC2 and Dub binaries
 ## Notes
 
 https://dev.to/noah11012/using-sdl2-scaling-and-moving-an-image-pj
+
+```
+Label. w: 42, h: 29
+Tweaker. w: 87, h: 29
+Clicker. w: 73, h: 29
+```

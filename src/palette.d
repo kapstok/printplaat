@@ -1,6 +1,6 @@
 module palette;
 
-import std.string, std.stdio;
+import std.string, std.stdio, std.conv;
 
 import components;
 import input = input.delegates;
@@ -21,12 +21,12 @@ public enum int functionbar = 0x826F62;
 public enum int item = 0xF8E2D4;
 public enum int toolbar = 0x2E2016;
 
+public enum int nodeDistance = 20;
+
 public int gridOffsetX = 0;
 public int gridOffsetY = 0;
 
 public void drawMainWindow() {
-	int w, h;
-
  	// Background grid
 	setColor(palette.printplaat, 0xff);
 	fillRect(0,0,600,600);
@@ -34,7 +34,7 @@ public void drawMainWindow() {
 	// Draw grid
 	setColor(palette.node, 0xff);
 	// Add one more to width and height to also show non-overflowing parts of grid
-    drawGrid(gridOffsetX, gridOffsetY, 600 / 20 + 1, 600 / 20 + 1);
+    drawGrid(gridOffsetX, gridOffsetY, 600 / nodeDistance + 1, 600 / nodeDistance + 1);
 	drawComponents(gridOffsetX, gridOffsetY);
 
 	// Show components
@@ -45,6 +45,7 @@ public void drawMainWindow() {
 	fillRect(600, 0, 200, 600);
 
 	// Create 'add Label' button
+	int w, h;
 	createButton(650, 50, &w, &h, palette.item, cast(char*)toStringz("Text"));
 	if (input.state == "Add Label") {
 		setColor(palette.item, 0xff);
@@ -71,7 +72,7 @@ public void drawMainWindow() {
 void drawGrid(int offsetX, int offsetY, int width, int height) {
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
-			fillCircle(x * 20 + offsetX, y * 20 + offsetY, 2);
+			fillCircle(x * nodeDistance + offsetX, y * nodeDistance + offsetY, 2);
 		}
 	}
 }
@@ -112,7 +113,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
         createComponent(
 			cast(char*)toStringz("rsc/components/tweaker.png"),
             component.x + offsetX, component.y + offsetY,
-			48, 48
+			24, 24
 		);
 
 		// Input appearance
@@ -120,8 +121,8 @@ void drawComponent(Component component, int offsetX, int offsetY) {
             field.Field(
                 component.x + offsetX,
                 component.y + offsetY,
-                48,
-                48,
+                24,
+                24,
                 () {if (component.id != null) input.state = "Tweaker " ~ component.id;}
             )
         );
@@ -133,7 +134,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
         createComponent(
 			cast(char*)toStringz("rsc/components/clicker.png"),
             component.x + offsetX, component.y + offsetY,
-			48, 48
+			24, 24
 		);
 
 		// Input appearance
@@ -141,8 +142,8 @@ void drawComponent(Component component, int offsetX, int offsetY) {
             field.Field(
                 component.x + offsetX,
                 component.y + offsetY,
-                48,
-                48,
+                24,
+                24,
                 () {if (component.id != null) input.state = "Clicker " ~ component.id;}
             )
         );
