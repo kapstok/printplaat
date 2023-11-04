@@ -13,6 +13,9 @@ import std.string;
 extern (C++) void redraw();
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
 
+// Temporary for testing
+extern (C++) void resetComponents();
+
 public Field grid = Field(0, 0, 600, 600);
 public Field functionBar = Field(600, 0, 200, 600);
 public string state = "";
@@ -33,6 +36,7 @@ private void inputToGrid(int x, int y) {
         state = "";
 
         components.Label label = new components.Label("[Your text here]", x, y);
+        resetComponents();
         components.push(label);
         string path = "/tmp/printplaat.xml";
         persistency.save(path);

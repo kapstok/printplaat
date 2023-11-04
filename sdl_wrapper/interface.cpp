@@ -57,6 +57,21 @@ void createButton(int x, int y, int* w, int* h, int hex, char* text) {
     Button btn = Button(engine, x, y, w, h, hex, text);
 }
 
+int createComponent(const char* path, int x, int y, int w, int h) {
+    Component* component = new Component(path, engine->renderer, x, y, w, h);
+
+    if (!component->isValid()) {
+        delete component;
+        return -1;
+    }
+
+    return engine->addComponent(component);
+}
+
+void resetComponents() {
+    engine->resetComponents();
+}
+
 void getFontWidthAndHeight(int* width, int* height, char* text) {
     TTF_SizeUTF8(engine->font, text, width, height);
 }

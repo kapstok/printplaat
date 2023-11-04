@@ -7,9 +7,10 @@
 // Components are rendered permanently
 class Component {
     public:
-        Component(SDL_Renderer* renderer, int x, int y, int w, int h);
+        Component(const char* path, SDL_Renderer* renderer, int x, int y, int w, int h);
         ~Component();
         void stamp();
+        bool isValid();
     private:
         SDL_Surface* surface;
         SDL_Texture* texture;
@@ -25,6 +26,9 @@ class Engine {
         void drawCircle(int center_x, int center_y, int radius);
         void drawRect(int x, int y, int w, int h);
         void stampComponents();
+        int addComponent(Component* component);
+        void removeComponent(int removeAt);
+        void resetComponents();
 
         SDL_Renderer* renderer;
         TTF_Font* font;

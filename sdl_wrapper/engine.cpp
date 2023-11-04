@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include <SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -30,14 +31,19 @@ Engine::Engine(int color, int width, int height) {
     }
 	
 	SDL_RenderClear(renderer);
-	this->components.push_back(new Component(this->renderer, 0, 0, 200, 200));
+	Component* lettuce = new Component("sdl_test/lettuce.png", this->renderer, 0, 0, 200, 200);
+
+	if (lettuce->isValid()) {
+		this->components.push_back(lettuce);
+	} else {
+		delete lettuce;
+	}
+
 	SDL_RenderPresent(renderer);
 }
 
 Engine::~Engine() {
-	for (Component* component : this->components) {
-		delete component;
-	}
+	this->resetComponents();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	TTF_CloseFont(this->font);
@@ -68,13 +74,37 @@ void Engine::drawRect(int x, int y, int w, int h) {
 
 void Engine::stampComponents() {
 	for (Component* component : this->components) {
-		component->stamp();
+		if (component != NULL) {
+			component->stamp();
+		}
 	}
 }
 
-Component::Component(SDL_Renderer* renderer, int x, int y, int w, int h) {
+int Engine::addComponent(Component* component) {
+	int index = this->components.size();
+	this->components.push_back(component);
+
+	return index;
+}
+
+void Engine::removeComponent(int removeAt) {
+	delete this->components[removeAt];
+	this->components[removeAt] = NULL;
+}
+
+void Engine::resetComponents() {
+	for (Component* component : this->components) {
+		if (component != NULL) {
+			delete component;
+		}
+	}
+
+	this->components = {};
+}
+
+Component::Component(const char* path, SDL_Renderer* renderer, int x, int y, int w, int h) {
 	this->renderer = renderer;
-	this->surface = IMG_Load("sdl_test/lettuce.png");
+	this->surface = IMG_Load(path);
 		if (this->surface == NULL) {
 		std::cout << "Error loading image: " << IMG_GetError() << std::endl;
 	}
@@ -89,12 +119,21 @@ Component::Component(SDL_Renderer* renderer, int x, int y, int w, int h) {
 }
 
 Component::~Component() {
-	SDL_FreeSurface(this->surface);
-	SDL_DestroyTexture(this->texture);
+	if (this->surface != NULL) {
+		SDL_FreeSurface(this->surface);
+	}
+
+	if (this->texture != NULL) {
+		SDL_DestroyTexture(this->texture);
+	}
 }
 
 void Component::stamp() {
 	SDL_RenderCopy(this->renderer, this->texture, NULL, &this->rect);
+}
+
+bool Component::isValid() {
+	return this->surface != NULL;
 }
 
 Button::Button(Engine* engine, int x, int y, int* width, int* height, int hex, char* text) {
