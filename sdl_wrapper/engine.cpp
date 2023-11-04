@@ -1,142 +1,116 @@
-// Consider this as the 'main' file of the library.
-
-#include <SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <cmath>
 #include <iostream>
+#include <cmath>
+#include <SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
+#include "engine.hpp"
 #include "palette.h"
 
-class Framework {
-public:
-    // Contructor which initialize the parameters.
-    Framework(int height_, int width_): height(height_), width(width_){
-        SDL_Init(SDL_INIT_VIDEO);       // Initializing SDL as Video
-        SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);      // setting draw color
-        SDL_RenderClear(renderer);      // Clear the newly created window
-        SDL_RenderPresent(renderer);    // Reflects the changes done in the
-                                        //  window.
+Engine::Engine(int color, int width, int height) {
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		std::cout << "Error SDL2 Initialization : " << SDL_GetError() << std::endl;
+	}
 
-        if (TTF_Init() < 0) {
-            std::cout << "TTF init went wrong";
-        } else {
-            sans = TTF_OpenFont("Lato-Light.ttf", 24);
-        }
+	SDL_CreateWindowAndRenderer(width, height, 0, &this->window, &this->renderer);
+	if (this->renderer == NULL) {
+		std::cout << "Error renderer creation" << std::endl;
+	}
+
+	// IMG_Init should return a binary OR of flags.
+	// IMG_INIT_PNG == 2
+	if (IMG_Init(IMG_INIT_PNG) != 2) {
+		std::cout << "Error SDL2_image Initialization" << std::endl;
+	}
+
+	if (TTF_Init() < 0) {
+        std::cout << "TTF init went wrong" << std::endl;
+    } else {
+        this->font = TTF_OpenFont("Lato-Light.ttf", 24);
     }
+	
+	SDL_RenderClear(renderer);
+	this->components.push_back(new Component(this->renderer, 0, 0, 200, 200));
+	SDL_RenderPresent(renderer);
+}
 
-    // Destructor
-    ~Framework() {
-        TTF_CloseFont(sans);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        TTF_Quit();
-        SDL_Quit();
-    }
+Engine::~Engine() {
+	for (Component* component : this->components) {
+		delete component;
+	}
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	TTF_CloseFont(this->font);
+	IMG_Quit();
+	TTF_Quit();
+	SDL_Quit();
+}
 
-    void drawCircle(int center_x, int center_y, int radius_){
-        // Drawing circle
-        for(int x=center_x-radius_; x<=center_x+radius_; x++){
-            for(int y=center_y-radius_; y<=center_y+radius_; y++){
-                if((std::pow(center_y-y,2)+std::pow(center_x-x,2)) <= std::pow(radius_,2)){
-                    SDL_RenderDrawPoint(renderer, x, y);
-                }
+void Engine::fillRect(int x, int y, int w, int h) {
+	SDL_Rect rect = {x,y,w,h};
+	SDL_RenderFillRect(this->renderer, &rect);
+}
+
+void Engine::drawCircle(int center_x, int center_y, int radius) {
+    for(int x=center_x-radius; x<=center_x+radius; x++){
+        for(int y=center_y-radius; y<=center_y+radius; y++){
+            if((std::pow(center_y-y,2)+std::pow(center_x-x,2)) <= std::pow(radius,2)){
+                SDL_RenderDrawPoint(renderer, x, y);
             }
         }
     }
-
-    void drawRect(int x, int y, int w, int h) {
-        SDL_Rect rect = {x,y,w,h};
-        SDL_RenderDrawRect(renderer, &rect);
-    }
-
-    void fillRect(int x, int y, int w, int h) {
-        SDL_Rect rect = {x,y,w,h};
-        SDL_RenderFillRect(renderer, &rect);
-    }
-
-    SDL_Renderer *renderer = NULL;      // Pointer for the renderer
-    TTF_Font* sans = NULL;
-
-private:
-    int height;     // Height of the window
-    int width;      // Width of the window
-    SDL_Window *window = NULL;      // Pointer for the window
-};
-
-class Button {
-    public:
-    Button(Framework* fw, int x, int y, int* width, int* height, int hex, char* text) {
-        ubyte r, g, b;
-        hexToRgb(hex, &r, &g, &b);
-        TTF_SizeUTF8(fw->sans, text, width, height);
-
-        SDL_Color color = {r,g,b};
-        msg = TTF_RenderText_Blended(fw->sans, text, color);
-        texture = SDL_CreateTextureFromSurface(fw->renderer, msg);
-
-        SDL_Rect rect = {x, y, *width, *height};
-        SDL_RenderCopy(fw->renderer, texture, 0x0, &rect);
-    }
-
-    ~Button() {
-        SDL_FreeSurface(msg);
-        SDL_DestroyTexture(texture);
-
-    }
-
-    private:
-        SDL_Surface* msg;
-        SDL_Texture* texture;
-};
-
-Framework* fw;
-SDL_Event event;
-
-void init(int width, int height) {
-    fw = new Framework(width, height);
 }
 
-void drawRect(int x, int y, int width, int height) {
-    fw->drawRect(x, y, width, height);
+void Engine::drawRect(int x, int y, int w, int h) {
+    SDL_Rect rect = {x,y,w,h};
+    SDL_RenderDrawRect(renderer, &rect);
 }
 
-void fillRect(int x, int y, int width, int height) {
-    fw->fillRect(x, y, width, height);
+void Engine::stampComponents() {
+	for (Component* component : this->components) {
+		component->stamp();
+	}
 }
 
-void fillCircle(int x, int y, int radius) {
-    fw->drawCircle(x, y, radius);
+Component::Component(SDL_Renderer* renderer, int x, int y, int w, int h) {
+	this->renderer = renderer;
+	this->surface = IMG_Load("sdl_test/lettuce.png");
+		if (this->surface == NULL) {
+		std::cout << "Error loading image: " << IMG_GetError() << std::endl;
+	}
+
+	this->texture = SDL_CreateTextureFromSurface(renderer, this->surface);
+	if (this->texture == NULL) {
+		std::cout << "Error creating texture" << std::endl;
+	}
+
+	this->rect = {x,y,w,h};
+	this->stamp();
 }
 
-void setColor(int hex, int a) {
+Component::~Component() {
+	SDL_FreeSurface(this->surface);
+	SDL_DestroyTexture(this->texture);
+}
+
+void Component::stamp() {
+	SDL_RenderCopy(this->renderer, this->texture, NULL, &this->rect);
+}
+
+Button::Button(Engine* engine, int x, int y, int* width, int* height, int hex, char* text) {
     ubyte r, g, b;
     hexToRgb(hex, &r, &g, &b);
-    SDL_SetRenderDrawColor(fw->renderer, r, g, b, a);
+    TTF_SizeUTF8(engine->font, text, width, height);
+
+    SDL_Color color = {r,g,b};
+    this->surface = TTF_RenderText_Blended(engine->font, text, color);
+    this->texture = SDL_CreateTextureFromSurface(engine->renderer, this->surface);
+
+    SDL_Rect rect = {x, y, *width, *height};
+    SDL_RenderCopy(engine->renderer, texture, 0x0, &rect);
 }
 
-// Processes new changes on GUI.
-// Returns 1 if user closes window.
-short tick() {
-    SDL_Delay(10);
-    SDL_PollEvent(&event);
-
-    if (event.type == SDL_QUIT) {
-        delete fw;
-        return 1;
-    }
-
-    return 0;
-}
-
-void redraw() {
-    SDL_RenderPresent(fw->renderer);
-}
-
-void createButton(int x, int y, int* w, int* h, int hex, char* text) {
-    Button btn = Button(fw, x, y, w, h, hex, text);
-}
-
-void getFontWidthAndHeight(int* width, int* height, char* text) {
-    TTF_SizeUTF8(fw->sans, text, width, height);
+Button::~Button() {
+    SDL_FreeSurface(this->surface);
+    SDL_DestroyTexture(this->texture);
 }

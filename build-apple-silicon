@@ -3,7 +3,7 @@
 mkdir build
 pushd build
 
-cmake .. -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -I/usr/local/homebrew/Cellar/sdl2/2.28.4/include/SDL2/ -I/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/include/"
+cmake .. -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -I/usr/local/homebrew/Cellar/sdl2/2.28.4/include/SDL2/ -I/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/include/ -I/usr/local/homebrew/Cellar/sdl2_image/2.6.3_2/include/"
 make
 
 mkdir arsd-official
@@ -20,5 +20,6 @@ popd
 /usr/local/homebrew/Cellar/ldc/1.35.0/bin/ldc2 `find src -name "*.d"` ./build/arsd-official/arsd/dom.d \
 -I./src -I./build/arsd-official/ -L-lstdc++ \
 -L-L/usr/local/homebrew/Cellar/sdl2/2.28.4/lib/ -L-L/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/lib/ \
--L-Lbuild -L-lsdlwrapper -L-lSDL2 -L-lSDL2_ttf -L-w \
+-L-L/usr/local/homebrew/Cellar/sdl2_image/2.6.3_2/lib/ \
+-L-Lbuild -L-lsdlwrapper -L-lSDL2 -L-lSDL2_ttf -L-lSDL2_image -L-w \
 --march=arm64 -g --od=./build --of=./build/printplaat --run

@@ -12,6 +12,7 @@ extern (C++) void fillRect(int x, int y, int width, int height);
 extern (C++) void fillCircle(int x, int y, int radius);
 extern (C++) void setColor(int hex, int a);
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
+extern (C++) void stampComponents();
 
 public enum int printplaat = 0xF7E1D3;
 public enum int node = 0xBDD0C4;
@@ -34,6 +35,9 @@ public void drawMainWindow() {
 	// Add one more to width and height to also show non-overflowing parts of grid
     drawGrid(gridOffsetX, gridOffsetY, 600 / 20 + 1, 600 / 20 + 1);
 	drawComponents(gridOffsetX, gridOffsetY);
+
+	// Show components
+	stampComponents();
 
 	// Background functionbar
 	setColor(palette.functionbar, 0xff);

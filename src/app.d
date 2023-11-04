@@ -6,7 +6,7 @@ import std.conv;
 import palette, persistency;
 import input = input.delegates;
 
-extern (C++) void init(int width, int height);
+extern (C++) void init(int color, int width, int height);
 extern (C++) void drawRect(int x, int y, int width, int height);
 extern (C++) short tick();
 
@@ -20,7 +20,7 @@ enum int rightClick = 4;
 enum int userClosedWindowSignal = 0;
 
 void main() {
-    init(600, 800);
+    init(palette.printplaat, 800, 600);
 
 	persistency.load("/tmp/printplaat.xml");
 	palette.drawMainWindow();
