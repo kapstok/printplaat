@@ -16,6 +16,7 @@ INCLUDE(FindPkgConfig)
 # Searching SDL2 package.
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 #find_package(SDL_ttf REQUIRED)
+#find_package(SDL_image REQUIRED)
 
 # Including our external library's directory for header files!
 INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})

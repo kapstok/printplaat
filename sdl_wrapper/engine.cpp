@@ -27,17 +27,17 @@ Engine::Engine(int color, int width, int height) {
 	if (TTF_Init() < 0) {
         std::cout << "TTF init went wrong" << std::endl;
     } else {
-        this->font = TTF_OpenFont("Lato-Light.ttf", 24);
+        this->font = TTF_OpenFont("rsc/Lato-Light.ttf", 24);
     }
 	
 	SDL_RenderClear(renderer);
-	Component* lettuce = new Component("sdl_test/lettuce.png", this->renderer, 0, 0, 200, 200);
+	// Component* lettuce = new Component("rsc/components/clicker.png", this->renderer, 0, 0, 200, 200);
 
-	if (lettuce->isValid()) {
-		this->components.push_back(lettuce);
-	} else {
-		delete lettuce;
-	}
+	// if (lettuce->isValid()) {
+	// 	this->components.push_back(lettuce);
+	// } else {
+	// 	delete lettuce;
+	// }
 
 	SDL_RenderPresent(renderer);
 }

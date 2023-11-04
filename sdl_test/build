@@ -1,9 +1,0 @@
-#!/bin/bash
-
-g++ -I/usr/local/homebrew/Cellar/sdl2/2.28.4/include/SDL2/ \
--I/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/include/ \
--I/usr/local/homebrew/Cellar/sdl2_image/2.6.3_2/include/ \
--L/usr/local/homebrew/Cellar/sdl2/2.28.4/lib/ -L/usr/local/homebrew/Cellar/sdl2_ttf/2.20.2/lib/ \
--L/usr/local/homebrew/Cellar/sdl2_image/2.6.3_2/lib/ \
--lSDL2 -lSDL2_ttf -lSDL2_image \
-main.c && ./a.out

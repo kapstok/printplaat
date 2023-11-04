@@ -1,5 +1,12 @@
 # Printplaat
 
+## User documentation
+
+User documentation can be found in the [doc](doc) folder.
+Below a list of user documentation.
+
+- [Different components](doc/components.md)
+
 ## Dependencies
 
 - Dub (Optional for aarch64/Apple Silicon)
@@ -24,3 +31,7 @@ For Apple Silicon, when only `./run-apple-silicon` works,
 one could try to [download](https://github.com/ldc-developers/ldc/releases/download/v1.35.0/ldc2-1.35.0-osx-arm64.tar.xz)
 and install LDC2 and Dub binaries
 ([source](https://forum.dlang.org/post/wkzhhnhxbablkscprchm@forum.dlang.org))
+
+## Notes
+
+https://dev.to/noah11012/using-sdl2-scaling-and-moving-an-image-pj

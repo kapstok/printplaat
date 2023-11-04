@@ -84,3 +84,23 @@ class Label : Component {
         return xml.toString();
     }
 }
+
+class Tweaker : Component {
+    this(int x, int y, int w, int h) {
+        super("Tweaker", x, y, w, h);
+    }
+
+    override protected string concreteClassToXml() {
+        return "";
+    }
+}
+
+class Clicker : Component {
+    this(int x, int y, int w, int h) {
+        super("Clicker", x, y, w, h);
+    }
+
+    override protected string concreteClassToXml() {
+        return "";
+    }
+}

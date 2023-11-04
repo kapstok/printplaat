@@ -12,6 +12,7 @@ extern (C++) void fillRect(int x, int y, int width, int height);
 extern (C++) void fillCircle(int x, int y, int radius);
 extern (C++) void setColor(int hex, int a);
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
+extern (C++) int createComponent(const char* path, int x, int y, int w, int h);
 extern (C++) void stampComponents();
 
 public enum int printplaat = 0xF7E1D3;
@@ -50,6 +51,20 @@ public void drawMainWindow() {
 		drawRect(625, 40, w + 50, h + 20);
 	}
 
+	// Create 'add Tweaker' button
+	createButton(650, 150, &w, &h, palette.item, cast(char*)toStringz("Tweaker"));
+	if (input.state == "Add Tweaker") {
+		setColor(palette.item, 0xff);
+		drawRect(625, 140, w + 50, h + 20);
+	}
+
+	// Create 'add Clicker' button
+	createButton(650, 250, &w, &h, palette.item, cast(char*)toStringz("Clicker"));
+	if (input.state == "Add Clicker") {
+		setColor(palette.item, 0xff);
+		drawRect(625, 240, w + 50, h + 20);
+	}
+
 	redraw();
 }
 
@@ -76,7 +91,8 @@ void drawComponent(Component component, int offsetX, int offsetY) {
             component.x + offsetX, component.y + offsetY,
             &w, &h, // Both variables are required, but they only have use when button is created in engine.cpp.
             palette.toolbar,
-            cast(char*)toStringz((cast(Label)component).value));
+            cast(char*)toStringz((cast(Label)component).value)
+		);
 
 		// Input appearance
         input.grid.addDelegate(
@@ -88,7 +104,49 @@ void drawComponent(Component component, int offsetX, int offsetY) {
                 () {if (component.id != null) input.state = "Label " ~ component.id;}
             )
         );
-    } else {
+    } else if (component.type == "Tweaker") {
+		int w, h;
+
+		// Visual appearance
+		// TODO: do something with return value
+        createComponent(
+			cast(char*)toStringz("rsc/components/tweaker.png"),
+            component.x + offsetX, component.y + offsetY,
+			48, 48
+		);
+
+		// Input appearance
+        input.grid.addDelegate(
+            field.Field(
+                component.x + offsetX,
+                component.y + offsetY,
+                48,
+                48,
+                () {if (component.id != null) input.state = "Tweaker " ~ component.id;}
+            )
+        );
+	} else if (component.type == "Clicker") {
+		int w, h;
+
+		// Visual appearance
+		// TODO: do something with return value
+        createComponent(
+			cast(char*)toStringz("rsc/components/clicker.png"),
+            component.x + offsetX, component.y + offsetY,
+			48, 48
+		);
+
+		// Input appearance
+        input.grid.addDelegate(
+            field.Field(
+                component.x + offsetX,
+                component.y + offsetY,
+                48,
+                48,
+                () {if (component.id != null) input.state = "Clicker " ~ component.id;}
+            )
+        );
+	} else {
         writeln("::ERROR:: Unsupported component type!");
     }
 }

@@ -37,8 +37,27 @@ public void load(string path) {
                 );
                 components.push(label, false);
                 break;
+            case "Tweaker":
+                components.Tweaker tweaker = new components.Tweaker(
+                    to!int(rawComponent.getAttribute("x")),
+                    to!int(rawComponent.getAttribute("y")),
+                    to!int(rawComponent.getAttribute("w")),
+                    to!int(rawComponent.getAttribute("h"))
+                );
+                components.push(tweaker, false);
+                break;
+            case "Clicker":
+                components.Clicker clicker = new components.Clicker(
+                    to!int(rawComponent.getAttribute("x")),
+                    to!int(rawComponent.getAttribute("y")),
+                    to!int(rawComponent.getAttribute("w")),
+                    to!int(rawComponent.getAttribute("h"))
+                );
+                components.push(clicker, false);
+                break;
             default:
                 writeln("Invalid tag found: " ~ rawComponent.tagName);
+                break;
         }
     }
 
