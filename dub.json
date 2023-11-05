@@ -12,7 +12,7 @@
 	],
 	"lflags": [
 		"-Lbuild",
-		"-lsdlwrapper",
+		"-ltoolkit",
 		"-lSDL2",
 		"-lSDL2_ttf",
 		"-lSDL2_image",
@@ -22,7 +22,7 @@
 	"license": "proprietary",
 	"name": "printplaat",
 	"preBuildCommands": [
-		"./build-wrapper"
+		"./build-toolkit"
 	],
 	"sourcePaths": [
 		"src"
