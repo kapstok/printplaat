@@ -14,8 +14,9 @@ Below a list of user documentation.
 - LDC2 (for aarch64/Apple Silicon)
 - CMake
 - G++
-- SDL2 development headers
-- SDL2_TTF development headers
+- SDL2 development headers & library
+- SDL2_image development headers & library
+- SDL2_ttf development headers & library
 - Bash
 
 ## Running
