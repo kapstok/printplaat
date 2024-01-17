@@ -3,6 +3,7 @@
 
 #include "engine.hpp"
 #include "palette.h"
+#include "properties.hpp"
 
 Engine* engine;
 SDL_Event event;
@@ -36,6 +37,7 @@ void setColor(int hex, int a) {
 }
 
 // Processes new changes on GUI.
+// Returns 1 if quit signal is fired (CTRL-C from terminal).
 // Returns 1 if user closes window.
 short tick() {
     SDL_Delay(10);
@@ -74,4 +76,9 @@ void resetComponents() {
 
 void getFontWidthAndHeight(int* width, int* height, char* text) {
     TTF_SizeUTF8(engine->font, text, width, height);
+}
+
+const char* openProperties(const char* data) {
+    PropertiesWin window = PropertiesWin(data);
+    return window.getData();
 }

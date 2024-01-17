@@ -10,6 +10,7 @@ import components, persistency;
 
 extern (C++) void redraw();
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
+extern (C++) char* openProperties(const char* data);
 
 public Field grid = Field(0, 0, 600, 600);
 public Field functionBar = Field(600, 0, 200, 600);
@@ -48,6 +49,7 @@ private void inputToGrid(int x, int y) {
     } else if (state.startsWith("Tweaker ")) {
         writeln(state);
         state = "";
+        writeln("OUTPUT: " ~ fromStringz(openProperties(cast(char*)toStringz("type: tweaker\ninput: "))));
     } else if (state == "Add Clicker") {
         state = "";
 
@@ -57,5 +59,6 @@ private void inputToGrid(int x, int y) {
     } else if (state.startsWith("Clicker ")) {
         writeln(state);
         state = "";
+        writeln("OUTPUT: " ~ fromStringz(openProperties(cast(char*)toStringz("type: clicker\noutput: "))));
     }
 }

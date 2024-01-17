@@ -7,6 +7,7 @@
 
 #include "engine.hpp"
 #include "palette.h"
+#include "properties.hpp"
 
 Engine::Engine(int color, int width, int height) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
