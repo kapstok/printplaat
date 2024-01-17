@@ -78,7 +78,7 @@ void getFontWidthAndHeight(int* width, int* height, char* text) {
     TTF_SizeUTF8(engine->font, text, width, height);
 }
 
-const char* openProperties(const char* data) {
+char* openProperties(const char* data) {
     PropertiesWin window = PropertiesWin(data);
     return window.getData();
 }

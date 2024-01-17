@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <iostream>
 #include "palette.h"
+#include <string.h>
 
 PropertiesWin::PropertiesWin(const char* data) {
     this->data = data;
@@ -45,7 +46,7 @@ void PropertiesWin::drawRect(int x, int y, int w, int h) {
     SDL_RenderDrawRect(renderer, &rect);
 }
 
-const char* PropertiesWin::getData() {
+char* PropertiesWin::getData() {
     int leftClick = 1;
     int mouseState[3];
     while (!tick()) {
@@ -53,7 +54,16 @@ const char* PropertiesWin::getData() {
 		if (mouseState[0] == leftClick) std::cout << "Left clicked" << std::endl;
     }
 
-    return this->data;
+    char* output;
+
+    if ((output = (char*) malloc(7 + strlen(this->data) + 1)) != NULL) {
+        output[0] = '\0';
+        strcat(output, "SELECT\n");
+        strcat(output, this->data);
+        return output;
+    } else {
+        return "";
+    }
 }
 
 // Processes new changes on GUI.

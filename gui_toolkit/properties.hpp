@@ -9,7 +9,7 @@ class PropertiesWin {
         void fillRect(int x, int y, int w, int h);
         void drawCircle(int center_x, int center_y, int radius);
         void drawRect(int x, int y, int w, int h);
-        const char* getData();
+        char* getData();
 
         SDL_Renderer* renderer;
     private:

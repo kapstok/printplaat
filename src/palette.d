@@ -47,21 +47,21 @@ public void drawMainWindow() {
 	// Create 'add Label' button
 	int w, h;
 	createButton(650, 50, &w, &h, palette.item, cast(char*)toStringz("Text"));
-	if (input.state == "Add Label") {
+	if (input.selection == "Add Label") {
 		setColor(palette.item, 0xff);
 		drawRect(625, 40, w + 50, h + 20);
 	}
 
 	// Create 'add Tweaker' button
 	createButton(650, 150, &w, &h, palette.item, cast(char*)toStringz("Tweaker"));
-	if (input.state == "Add Tweaker") {
+	if (input.selection == "Add Tweaker") {
 		setColor(palette.item, 0xff);
 		drawRect(625, 140, w + 50, h + 20);
 	}
 
 	// Create 'add Clicker' button
 	createButton(650, 250, &w, &h, palette.item, cast(char*)toStringz("Clicker"));
-	if (input.state == "Add Clicker") {
+	if (input.selection == "Add Clicker") {
 		setColor(palette.item, 0xff);
 		drawRect(625, 240, w + 50, h + 20);
 	}
@@ -102,7 +102,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
                 component.y + offsetY,
                 cast(int) component.w,
                 cast(int) component.h,
-                () {if (component.id != null) input.state = "Label " ~ component.id;}
+                () {if (component.id != null) input.selection = "Label " ~ component.id;}
             )
         );
     } else if (component.type == "Tweaker") {
@@ -123,7 +123,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
                 component.y + offsetY,
                 24,
                 24,
-                () {if (component.id != null) input.state = "Tweaker " ~ component.id;}
+                () {if (component.id != null) input.selection = "Tweaker " ~ component.id;}
             )
         );
 	} else if (component.type == "Clicker") {
@@ -144,7 +144,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
                 component.y + offsetY,
                 24,
                 24,
-                () {if (component.id != null) input.state = "Clicker " ~ component.id;}
+                () {if (component.id != null) input.selection = "Clicker " ~ component.id;}
             )
         );
 	} else {

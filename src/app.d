@@ -25,13 +25,13 @@ void main() {
 	persistency.load("/tmp/printplaat.xml");
 	palette.drawMainWindow();
 	input.functionBar.addDelegate(
-		input.Field(650, 50, 42, 29, () { input.state = "Add Label"; palette.drawMainWindow(); })
+		input.Field(650, 50, 42, 29, () { input.selection = "Add Label"; palette.drawMainWindow(); })
 	);
 	input.functionBar.addDelegate(
-		input.Field(650, 150, 87, 29, () { input.state = "Add Tweaker"; palette.drawMainWindow(); })
+		input.Field(650, 150, 87, 29, () { input.selection = "Add Tweaker"; palette.drawMainWindow(); })
 	);
 	input.functionBar.addDelegate(
-		input.Field(650, 250, 73, 29, () { input.state = "Add Clicker"; palette.drawMainWindow(); })
+		input.Field(650, 250, 73, 29, () { input.selection = "Add Clicker"; palette.drawMainWindow(); })
 	);
 
     short signal = tick();
