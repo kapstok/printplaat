@@ -10,7 +10,7 @@ import components, persistency;
 
 extern (C++) void redraw();
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
-extern (C++) char* openProperties(const char* data);
+extern (C++) char* openProperties(const char* data, const char* winTitle);
 
 public Field grid = Field(0, 0, 600, 600);
 public Field functionBar = Field(600, 0, 200, 600);
@@ -43,7 +43,11 @@ private void inputToGrid(int x, int y) {
             writeln("Don't know what to do!");
             output = "";
         }
-        char[] input = fromStringz(openProperties(cast(char*)toStringz(output)));
+        selection = originalComponent.type ~ " " ~ state[7..$];
+        char[] input = fromStringz(openProperties(
+            cast(char*)toStringz(output),
+            cast(char*)toStringz(selection)
+        ));
         interpretInputFromProperties(input);
         state = "";
     } else if (selection == "Add Label") {
@@ -64,7 +68,6 @@ private void inputToGrid(int x, int y) {
     } else if (selection.startsWith("Tweaker ")) {
         writeln("Selection: " ~ selection);
         selection = "";
-        writeln("OUTPUT: " ~ fromStringz(openProperties(cast(char*)toStringz("type: Tweaker\ninput: "))));
     } else if (selection == "Add Clicker") {
         selection = "";
 
@@ -73,17 +76,23 @@ private void inputToGrid(int x, int y) {
         persistency.save(path);
     } else if (selection.startsWith("Clicker ")) {
         writeln("Selection: " ~ selection);
-        char[] input = fromStringz(openProperties(cast(char*)toStringz("type: Clicker\noutput: ")));
+        char[] input = fromStringz(openProperties(
+            cast(char*)toStringz("type: Clicker\noutput: "),
+            cast(char*)toStringz(selection)
+        ));
         interpretInputFromProperties(input);
     }
 }
 
 private void interpretInputFromProperties(char[] input) {
     if (input.startsWith("SELECT\n")) {
-        state = "Select " ~ selection[8..$];
+        if (selection.startsWith("Clicker ") || selection.startsWith("Tweaker ")) {
+            state = "Select " ~ selection[8..$]; // We need to select a component to connect to now.
+        }
         selection = "";
         writeln("State: " ~ state);
     } else if (input.startsWith("CHANGE DATA\n")) { // TODO: Interpret CHANGE DATA
+        writeln("We will create a wire someday from data " ~ input);
         selection = "";
     } else {
         writeln("Unable to handle input:\n" ~ input);

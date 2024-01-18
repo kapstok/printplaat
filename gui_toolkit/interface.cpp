@@ -39,6 +39,7 @@ void setColor(int hex, int a) {
 // Processes new changes on GUI.
 // Returns 1 if quit signal is fired (CTRL-C from terminal).
 // Returns 1 if user closes window.
+// Returns 3 on mouse press.
 short tick() {
     SDL_Delay(10);
     SDL_PollEvent(&event);
@@ -46,6 +47,8 @@ short tick() {
     if (event.type == SDL_QUIT) {
         delete engine;
         return 1;
+    } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+        return 3;
     }
 
     return 0;
@@ -78,7 +81,10 @@ void getFontWidthAndHeight(int* width, int* height, char* text) {
     TTF_SizeUTF8(engine->font, text, width, height);
 }
 
-char* openProperties(const char* data) {
-    PropertiesWin window = PropertiesWin(data);
-    return window.getData();
+char* openProperties(const char* inputData, const char* winTitle) {
+    SDL_HideWindow(engine->window);
+    PropertiesWin window = PropertiesWin(inputData, winTitle, engine->font);
+    char* outputData = window.getData();
+    SDL_ShowWindow(engine->window);
+    return outputData;
 }

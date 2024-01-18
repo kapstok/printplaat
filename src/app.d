@@ -17,7 +17,7 @@ extern (C) int SDL_GetMouseState(int* x, int* y);
 enum int leftClick = 1;
 enum int rightClick = 4;
 
-enum int userClosedWindowSignal = 0;
+enum int userClosedWindowSignal = 1;
 
 void main() {
     init(palette.printplaat, 800, 600);
@@ -34,12 +34,15 @@ void main() {
 		input.Field(650, 250, 73, 29, () { input.selection = "Add Clicker"; palette.drawMainWindow(); })
 	);
 
-    short signal = tick();
+    short signal;
 	int[3] mouseState;
 
-	while (signal == userClosedWindowSignal) {
+	do {
 		signal = tick();
-		mouseState[0] = SDL_GetMouseState(&mouseState[1], &mouseState[2]);
-		if (mouseState[0] == leftClick) input.onLeftClick(mouseState[1], mouseState[2]);
-	}
+
+		if (signal == 3) {
+			mouseState[0] = SDL_GetMouseState(&mouseState[1], &mouseState[2]);
+			if (mouseState[0] == leftClick) input.onLeftClick(mouseState[1], mouseState[2]);
+		}
+	} while (signal != userClosedWindowSignal);
 }

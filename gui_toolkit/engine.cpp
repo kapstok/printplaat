@@ -18,6 +18,7 @@ Engine::Engine(int color, int width, int height) {
 	if (this->renderer == NULL) {
 		std::cout << "Error renderer creation" << std::endl;
 	}
+	SDL_SetWindowTitle(this->window, "Printplaat");
 
 	// IMG_Init should return a binary OR of flags.
 	// IMG_INIT_PNG == 2

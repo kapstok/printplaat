@@ -1,10 +1,11 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 class PropertiesWin {
     public:
-        PropertiesWin(const char* data);
+        PropertiesWin(const char* data, const char* winTitle, TTF_Font* font);
         ~PropertiesWin();
         void fillRect(int x, int y, int w, int h);
         void drawCircle(int center_x, int center_y, int radius);
@@ -14,6 +15,9 @@ class PropertiesWin {
         SDL_Renderer* renderer;
     private:
         short tick();
+        void drawElements(TTF_Font* font);
+        char* requestSelection();
+        char* commitData();
 
         SDL_Window* window;
         SDL_Event event;

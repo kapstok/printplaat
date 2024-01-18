@@ -31,9 +31,9 @@ class Engine {
         void resetComponents();
 
         SDL_Renderer* renderer;
+        SDL_Window* window;
         TTF_Font* font;
     private:
-        SDL_Window* window;
         std::vector<Component*> components = {};
 };
 
