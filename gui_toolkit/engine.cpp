@@ -9,6 +9,9 @@
 #include "palette.h"
 #include "properties.hpp"
 
+#define GRID_SIZE 600
+#define LINE_THICKNESS 4
+
 Engine::Engine(int color, int width, int height) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cout << "Error SDL2 Initialization : " << SDL_GetError() << std::endl;
@@ -32,6 +35,15 @@ Engine::Engine(int color, int width, int height) {
         this->font = TTF_OpenFont("rsc/Lato-Light.ttf", 24);
     }
 	
+	this->wireTexture = SDL_CreateTexture(
+		this->renderer,
+		SDL_PIXELFORMAT_RGBA8888,
+		SDL_TEXTUREACCESS_STATIC,
+		GRID_SIZE,
+		GRID_SIZE
+	);
+	this->wireRect = {0, 0, GRID_SIZE, GRID_SIZE};
+
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
 }
@@ -40,6 +52,7 @@ Engine::~Engine() {
 	this->resetComponents();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	SDL_DestroyTexture(wireTexture);
 	TTF_CloseFont(this->font);
 	IMG_Quit();
 	TTF_Quit();
@@ -74,10 +87,6 @@ void Engine::stampComponents() {
 	}
 }
 
-void Engine::stampWires() {
-	// TODO: Need implementation!
-}
-
 int Engine::addComponent(Component* component) {
 	int index = this->components.size();
 	this->components.push_back(component);
@@ -98,6 +107,44 @@ void Engine::resetComponents() {
 	}
 
 	this->components = {};
+}
+
+
+void Engine::stampWires() {
+	SDL_RenderCopy(this->renderer, this->wireTexture, NULL, &this->wireRect);
+}
+
+void Engine::addWireLine(int startX, int startY, int endX, int endY) {
+	SDL_SetRenderTarget(this->renderer, this->wireTexture);
+	ubyte r, g, b;
+    hexToRgb(0xBDD0C4, &r, &g, &b);
+    SDL_SetRenderDrawColor(this->renderer, r, g, b, 0xff);
+
+	if (startY > endY) { // It's a vertical line
+		this->fillRect(startX, startY, LINE_THICKNESS, startY - endY);
+	} else if (startY < endY) { // It's a vertical line
+		this->fillRect(startX, startY, LINE_THICKNESS, startY - endY);
+	} else if (startX > endX) { // It's a horizontal line
+		this->fillRect(startX, startY, startX - endX, LINE_THICKNESS);
+	} else if (startX < endX) { // It's a horizontal line
+		this->fillRect(startX, startY, startX - endX, LINE_THICKNESS);
+	} else {
+		std::cout << "Something went wrong! start == end for a line" << std::endl;
+	}
+
+	SDL_SetRenderTarget(this->renderer, NULL);
+}
+
+void Engine::resetWires() {
+	SDL_DestroyTexture(wireTexture);
+
+	this->wireTexture = SDL_CreateTexture(
+		this->renderer,
+		SDL_PIXELFORMAT_RGBA8888,
+		SDL_TEXTUREACCESS_STATIC,
+		GRID_SIZE,
+		GRID_SIZE
+	);
 }
 
 Component::Component(const char* path, SDL_Renderer* renderer, int x, int y, int w, int h) {

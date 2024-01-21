@@ -16,6 +16,7 @@ extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text
 extern (C++) int createComponent(const char* path, int x, int y, int w, int h);
 extern (C++) void stampComponents();
 extern (C++) void stampWires();
+extern (C++) void drawWireLine(int startX, int startY, int endX, int endY);
 
 public enum int printplaat = 0xF7E1D3;
 public enum int node = 0xBDD0C4;
@@ -153,4 +154,26 @@ void drawComponent(components.Component component, int offsetX, int offsetY) {
 	} else {
         writeln("::ERROR:: Unsupported component type!");
     }
+}
+
+void drawWires(int offsetX, int offsetY) {
+	foreach (wires.Wire wire; wires.getWires()) {
+		drawWire(wire, offsetX, offsetY);
+	}
+}
+
+void drawWire(wires.Wire wire, int offsetX, int offsetY) {
+	drawWireLine(
+		wire.output.x + offsetX,
+		wire.output.y + offsetY,
+		wire.output.x + offsetX + nodeDistance,
+		wire.output.y + offsetY
+	);
+
+	drawWireLine(
+		wire.input.x + offsetX - nodeDistance,
+		wire.input.y + offsetY,
+		wire.input.x,
+		wire.input.y
+	);
 }

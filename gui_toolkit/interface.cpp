@@ -90,3 +90,7 @@ char* openProperties(const char* inputData, const char* winTitle) {
     char* outputData = window.getData();
     return outputData;
 }
+
+void drawWireLine(int startX, int startY, int endX, int endY) {
+    engine->addWireLine(startX, startY, endX, endY);
+}

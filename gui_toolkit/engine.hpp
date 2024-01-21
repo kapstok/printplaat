@@ -22,20 +22,32 @@ class Engine {
     public:
         Engine(int color, int width, int height);
         ~Engine();
+
+        // Drawing
         void fillRect(int x, int y, int w, int h);
         void drawCircle(int center_x, int center_y, int radius);
         void drawRect(int x, int y, int w, int h);
+
+        // Components
         void stampComponents();
-        void stampWires();
         int addComponent(Component* component);
         void removeComponent(int removeAt);
         void resetComponents();
+
+        // Wires
+        void stampWires();
+        void addWireLine(int startX, int startY, int endX, int endY);
+        void resetWires();
 
         SDL_Renderer* renderer;
         SDL_Window* window;
         TTF_Font* font;
     private:
         std::vector<Component*> components = {};
+
+        // Related stuff for wiring
+        SDL_Texture* wireTexture;
+        SDL_Rect wireRect;
 };
 
 // Buttons are rendered temporarily
