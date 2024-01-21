@@ -74,6 +74,10 @@ void Engine::stampComponents() {
 	}
 }
 
+void Engine::stampWires() {
+	// TODO: Need implementation!
+}
+
 int Engine::addComponent(Component* component) {
 	int index = this->components.size();
 	this->components.push_back(component);

@@ -26,6 +26,7 @@ class Engine {
         void drawCircle(int center_x, int center_y, int radius);
         void drawRect(int x, int y, int w, int h);
         void stampComponents();
+        void stampWires();
         int addComponent(Component* component);
         void removeComponent(int removeAt);
         void resetComponents();

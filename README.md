@@ -22,7 +22,7 @@ Below a list of user documentation.
 ## Running
 
 ```bash
-dub run --force     # On any platform
+dub run --force     # On any x86_64 platform
 ./run-apple-silicon # On Macbooks with an M1 or M2 chip
 ```
 

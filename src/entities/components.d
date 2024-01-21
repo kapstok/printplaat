@@ -1,9 +1,10 @@
-module components;
+module entities.components;
 
 import arsd.dom;
-import std.conv, std.stdio, std.string;
+import std.conv, std.string;
 
 import palette;
+import entity = entities.entity;
 
 extern (C++) void getFontWidthAndHeight(int* width, int* height, char* text);
 
@@ -26,7 +27,7 @@ public Component[] getComponents() {
     return components;
 }
 
-abstract class Component {
+abstract class Component : entity.Entity {
     public immutable string type;
     public immutable int x, y, w, h;
     public string id = null;
@@ -50,8 +51,6 @@ abstract class Component {
         this.h = h;
     }
 
-    protected abstract string concreteClassToXml();
-
     public final string toXml() {
         auto xml = new Document()
             .createElement(type)
@@ -63,6 +62,8 @@ abstract class Component {
         xml.innerRawSource = concreteClassToXml();
         return xml.toString();
     }
+
+    protected abstract string concreteClassToXml();
 }
 
 class Label : Component {

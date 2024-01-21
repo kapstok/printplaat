@@ -30,6 +30,10 @@ void stampComponents() {
     engine->stampComponents();
 }
 
+void stampWires() {
+    engine->stampWires();
+}
+
 void setColor(int hex, int a) {
     ubyte r, g, b;
     hexToRgb(hex, &r, &g, &b);
@@ -82,9 +86,7 @@ void getFontWidthAndHeight(int* width, int* height, char* text) {
 }
 
 char* openProperties(const char* inputData, const char* winTitle) {
-    SDL_HideWindow(engine->window);
     PropertiesWin window = PropertiesWin(inputData, winTitle, engine->font);
     char* outputData = window.getData();
-    SDL_ShowWindow(engine->window);
     return outputData;
 }

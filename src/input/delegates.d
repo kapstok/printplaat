@@ -2,11 +2,12 @@
 
 module input.delegates;
 
-import std.stdio, std.string, std.conv;
+import std.stdio, std.string, std.conv, std.regex;
 
 public import input.field : Field;
-import palette;
-import components, persistency;
+import palette, persistency;
+import components = entities.components;
+import wires = entities.wires;
 
 extern (C++) void redraw();
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
@@ -91,8 +92,33 @@ private void interpretInputFromProperties(char[] input) {
         }
         selection = "";
         writeln("State: " ~ state);
-    } else if (input.startsWith("CHANGE DATA\n")) { // TODO: Interpret CHANGE DATA
-        writeln("We will create a wire someday from data " ~ input);
+    } else if (input.startsWith("CHANGE DATA\n")) {
+        if (selection.startsWith("Clicker ")) {
+            char[][] data = splitLines(input)[1..$];
+            auto pattern = ctRegex!(` ([0-9]+)$`);
+
+            foreach (char[] line; data) {
+                if (line.startsWith("output: ")) {
+                    auto match = matchFirst(line, pattern);
+
+                    if (match.empty) {
+                        writeln("Invalid output line: '" ~ line ~ "'");
+                        writeln("At data:\n" ~ input);
+                    } else {
+                        int outputId = to!int(match[1]);
+                        int inputId = to!int(selection[8..$]); // We know it's a Clicker
+                        components.Component outputComponent = components.getComponents()[outputId];
+                        components.Component inputComponent = components.getComponents()[inputId];
+                        wires.push(new wires.Wire(outputComponent, inputComponent));
+                        persistency.save(path);
+                    }
+                } else {
+                    writeln("Skipping '" ~ line ~ "' ...");
+                }
+            }
+        } else {
+            writeln("Could not interpret data for " ~ selection);
+        }
         selection = "";
     } else {
         writeln("Unable to handle input:\n" ~ input);

@@ -2,7 +2,8 @@ module palette;
 
 import std.string, std.stdio, std.conv;
 
-import components;
+import components = entities.components;
+import wires = entities.wires;
 import input = input.delegates;
 import field = input.field;
 
@@ -14,6 +15,7 @@ extern (C++) void setColor(int hex, int a);
 extern (C++) void createButton(int x, int y, int* w, int* h, int hex, char* text);
 extern (C++) int createComponent(const char* path, int x, int y, int w, int h);
 extern (C++) void stampComponents();
+extern (C++) void stampWires();
 
 public enum int printplaat = 0xF7E1D3;
 public enum int node = 0xBDD0C4;
@@ -37,8 +39,9 @@ public void drawMainWindow() {
     drawGrid(gridOffsetX, gridOffsetY, 600 / nodeDistance + 1, 600 / nodeDistance + 1);
 	drawComponents(gridOffsetX, gridOffsetY);
 
-	// Show components
+	// Show components and wires
 	stampComponents();
+	stampWires();
 
 	// Background functionbar
 	setColor(palette.functionbar, 0xff);
@@ -78,12 +81,12 @@ void drawGrid(int offsetX, int offsetY, int width, int height) {
 }
 
 void drawComponents(int offsetX, int offsetY) {
-	foreach(Component component; components.getComponents()) {
+	foreach(components.Component component; components.getComponents()) {
 		drawComponent(component, offsetX, offsetY);
 	}
 }
 
-void drawComponent(Component component, int offsetX, int offsetY) {
+void drawComponent(components.Component component, int offsetX, int offsetY) {
 	if (component.type == "Label") {
     	int w, h;
 
@@ -92,7 +95,7 @@ void drawComponent(Component component, int offsetX, int offsetY) {
             component.x + offsetX, component.y + offsetY,
             &w, &h, // Both variables are required, but they only have use when button is created in engine.cpp.
             palette.toolbar,
-            cast(char*)toStringz((cast(Label)component).value)
+            cast(char*)toStringz((cast(components.Label)component).value)
 		);
 
 		// Input appearance
