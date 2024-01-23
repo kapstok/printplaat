@@ -42,6 +42,14 @@ public void drawMainWindow() {
 
 	// Show components and wires
 	stampComponents();
+	drawWire(
+		new wires.Wire(
+			new components.Clicker(20, 20, 20, 20),
+			new components.Tweaker(60, 20, 20, 20)
+		),
+		8,
+		8
+	);
 	stampWires();
 
 	// Background functionbar

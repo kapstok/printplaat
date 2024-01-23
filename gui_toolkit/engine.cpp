@@ -38,11 +38,17 @@ Engine::Engine(int color, int width, int height) {
 	this->wireTexture = SDL_CreateTexture(
 		this->renderer,
 		SDL_PIXELFORMAT_RGBA8888,
-		SDL_TEXTUREACCESS_STATIC,
+		SDL_TEXTUREACCESS_TARGET,
 		GRID_SIZE,
 		GRID_SIZE
 	);
 	this->wireRect = {0, 0, GRID_SIZE, GRID_SIZE};
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(wireTexture, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderTarget(renderer, wireTexture);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
+	SDL_SetRenderTarget(renderer, NULL);
 
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
@@ -122,12 +128,16 @@ void Engine::addWireLine(int startX, int startY, int endX, int endY) {
 
 	if (startY > endY) { // It's a vertical line
 		this->fillRect(startX, startY, LINE_THICKNESS, startY - endY);
+		std::cout << "x: " << startX << " y: " << startY << " w: " << LINE_THICKNESS << " h: " << startY - endY << std::endl;
 	} else if (startY < endY) { // It's a vertical line
-		this->fillRect(startX, startY, LINE_THICKNESS, startY - endY);
+		this->fillRect(startX, startY, LINE_THICKNESS, endY - startY);
+		std::cout << "x: " << startX << " y: " << startY << " w: " << LINE_THICKNESS << " h: " << endY - startY << std::endl;
 	} else if (startX > endX) { // It's a horizontal line
 		this->fillRect(startX, startY, startX - endX, LINE_THICKNESS);
+		std::cout << "x: " << startX << " y: " << startY << " w: " << startX - endX << " h: " << LINE_THICKNESS << std::endl;
 	} else if (startX < endX) { // It's a horizontal line
-		this->fillRect(startX, startY, startX - endX, LINE_THICKNESS);
+		this->fillRect(startX, startY, endX - startX, LINE_THICKNESS);
+		std::cout << "x: " << startX << " y: " << startY << " w: " << endX - startX << " h: " << LINE_THICKNESS << std::endl;
 	} else {
 		std::cout << "Something went wrong! start == end for a line" << std::endl;
 	}
